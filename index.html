@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dashboards by AfnanStudio95</title>
+<meta name="description" content="Send a spreadsheet, get back an interactive dashboard built around the handful of numbers you actually check. Three working samples you can click.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --paper:#fbfcfa; --surface:#ffffff; --surface-2:#f4f6f3;
+  --ink:#10140f; --ink-2:#4b534a; --ink-3:#7c847a;
+  --rule:#e3e8e1; --rule-strong:#c9d1c7;
+  --brand:#1d4a36; --brand-ink:#ffffff; --accent:#2a78d6;
+  --sans:'IBM Plex Sans',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:12px;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --paper:#101310; --surface:#191d18; --surface-2:#20251f;
+  --ink:#f3f5f1; --ink-2:#b7bdb3; --ink-3:#868d83;
+  --rule:#2b312a; --rule-strong:#3c443a;
+  --brand:#8ecfae; --brand-ink:#0d1a13; --accent:#3987e5;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#101310; --surface:#191d18; --surface-2:#20251f;
+  --ink:#f3f5f1; --ink-2:#b7bdb3; --ink-3:#868d83;
+  --rule:#2b312a; --rule-strong:#3c443a;
+  --brand:#8ecfae; --brand-ink:#0d1a13; --accent:#3987e5;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:var(--ink)}
+.wrap{max-width:1040px;margin:0 auto;padding-block:40px 64px;padding-left:16px;padding-right:16px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-size:clamp(30px,5.4vw,46px);line-height:1.08;letter-spacing:-.025em;font-weight:600;margin:10px 0 14px;text-wrap:balance;max-width:17ch}
+.lede{font-size:clamp(16px,2.1vw,18.5px);color:var(--ink-2);margin:0;max-width:60ch}
+header.top{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;justify-content:space-between;margin-bottom:38px}
+.themebtn{font:inherit;font-size:13px;padding:8px 14px;border-radius:999px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink-2);cursor:pointer}
+.themebtn:hover{color:var(--ink);border-color:var(--ink-3)}
+h2{font-size:clamp(20px,3vw,25px);letter-spacing:-.018em;font-weight:600;margin:0 0 6px;text-wrap:balance}
+.sechead{margin:54px 0 18px}
+.sechead p{margin:0;color:var(--ink-2);max-width:60ch}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(282px,1fr));gap:18px}
+.card{border:1px solid var(--rule);border-radius:var(--r);background:var(--surface);overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit;transition:border-color .15s,transform .15s}
+.card:hover{border-color:var(--ink-3);transform:translateY(-2px)}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
+.card .shot{aspect-ratio:800/475;background:var(--surface-2);border-bottom:1px solid var(--rule);max-width:100%}
+.card .body{padding:15px 17px 18px}
+.card h3{font-size:17px;margin:0 0 5px;font-weight:600;letter-spacing:-.012em}
+.card p{margin:0;font-size:14.5px;color:var(--ink-2)}
+.card .open{display:inline-block;margin-top:12px;font-size:13.5px;font-weight:500;color:var(--accent)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;counter-reset:s}
+.step{border-top:2px solid var(--brand);padding-top:13px}
+.step b{display:block;font-size:16px;margin-bottom:4px;font-weight:600}
+.step span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ink-3);display:block;margin-bottom:7px}
+.step p{margin:0;font-size:14.5px;color:var(--ink-2)}
+.send{border:1px solid var(--rule);border-radius:var(--r);background:var(--surface);padding:20px 22px}
+.send ol{margin:0;padding-left:20px}
+.send li{margin-bottom:7px;color:var(--ink-2)}
+.send li b{color:var(--ink);font-weight:500}
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.tier{border:1px solid var(--rule);border-radius:var(--r);background:var(--surface);padding:19px 20px 22px;display:flex;flex-direction:column}
+.tier.pick{border-color:var(--brand);border-width:2px}
+.tier .n{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.tier .p{font-size:30px;font-weight:600;letter-spacing:-.025em;margin:8px 0 2px}
+.tier .t{font-size:13px;color:var(--ink-3);margin-bottom:13px}
+.tier ul{margin:0;padding-left:18px;font-size:14.5px;color:var(--ink-2)}
+.tier li{margin-bottom:5px}
+.cta{margin-top:54px;border:1px solid var(--rule);border-radius:var(--r);background:var(--surface);padding:26px 24px;text-align:center}
+.cta p{margin:0 auto 16px;color:var(--ink-2);max-width:52ch}
+.btn{display:inline-block;background:var(--brand);color:var(--brand-ink);text-decoration:none;font-weight:500;padding:12px 24px;border-radius:999px;font-size:15.5px}
+.note{font-size:13.5px;color:var(--ink-3);margin-top:12px}
+footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--rule);color:var(--ink-3);font-size:13.5px;display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <div class="eyebrow">AfnanStudio95 · Lahore</div>
+      <h1>Send a spreadsheet, get a dashboard back</h1>
+      <p class="lede">You already have the numbers. They are just spread across a file nobody enjoys opening. I turn that file into one page built around the handful of figures you actually check.</p>
+    </div>
+    <button class="themebtn" id="themebtn" type="button">Dark mode</button>
+  </header>
+
+  <div class="sechead" style="margin-top:0">
+    <h2>Three you can click right now</h2>
+    <p>Real working pages, not screenshots. Filter them, hover the charts, type into the budget one.</p>
+  </div>
+  <div class="cards">
+    <a class="card" href="sales.html">
+      <img class="shot" src="thumb-sales.jpg" alt="A sales dashboard showing revenue by month and a stacked bar chart of sales channels." width="800" height="475">
+      <div class="body">
+        <h3>Small shop sales</h3>
+        <p>Revenue, orders and average order value, filtered by month or by sales channel.</p>
+        <span class="open">Open the sample &rarr;</span>
+      </div>
+    </a>
+    <a class="card" href="budget.html">
+      <img class="shot" src="thumb-budget.jpg" alt="A household budget dashboard with a spending donut and budget-versus-actual bars." width="800" height="475">
+      <div class="body">
+        <h3>Household budget</h3>
+        <p>Type your own numbers in and every chart and total updates as you type.</p>
+        <span class="open">Open the sample &rarr;</span>
+      </div>
+    </a>
+    <a class="card" href="invoices.html">
+      <img class="shot" src="thumb-invoices.jpg" alt="A freelancer invoice dashboard showing invoiced against paid and overdue invoices." width="800" height="475">
+      <div class="body">
+        <h3>Freelancer invoices</h3>
+        <p>What you billed, what landed in the bank, and which invoices are overdue.</p>
+        <span class="open">Open the sample &rarr;</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="sechead">
+    <h2>How it works</h2>
+  </div>
+  <div class="steps">
+    <div class="step"><span>STEP ONE</span><b>You send the file</b><p>A spreadsheet or CSV. Messy is fine. Twenty rows is enough to start.</p></div>
+    <div class="step"><span>STEP TWO</span><b>I build the page</b><p>Three to seven days depending on size. You see a draft before it is finished.</p></div>
+    <div class="step"><span>STEP THREE</span><b>You get one file</b><p>A single HTML file. Open it by double-clicking. No login, no subscription, nothing uploaded anywhere.</p></div>
+  </div>
+
+  <div class="sechead">
+    <h2>What I need from you</h2>
+    <p>Answer these and the dashboard almost designs itself.</p>
+  </div>
+  <div class="send">
+    <ol>
+      <li><b>Your data</b>, as one flat table: one header row, one row per record.</li>
+      <li><b>The decision it should help you make</b>, in one sentence.</li>
+      <li><b>The three to six numbers</b> you want at the top of the page.</li>
+      <li><b>How you want it broken down</b>: by month, product, client, channel.</li>
+      <li><b>Any target or goal figure</b> you are measuring against.</li>
+      <li><b>Whether you will keep adding data</b>, or this is a one-off snapshot.</li>
+      <li><b>Your colours and logo</b>, if you have them. Optional.</li>
+    </ol>
+  </div>
+
+  <div class="sechead">
+    <h2>What it costs</h2>
+    <p>Priced by how much is on the page, not by hours. Add-ons: extra page $39, data cleanup $39, a matching Google Sheets version $49.</p>
+  </div>
+  <div class="tiers">
+    <div class="tier">
+      <span class="n">Starter</span><div class="p">$49</div><div class="t">about 3 days</div>
+      <ul><li>4 headline figures</li><li>2 charts, 1 table</li><li>One data source</li><li>1 round of changes</li></ul>
+    </div>
+    <div class="tier pick">
+      <span class="n">Standard</span><div class="p">$99</div><div class="t">about 5 days</div>
+      <ul><li>6 headline figures</li><li>4 charts, 2 tables</li><li>Date and category filters</li><li>2 rounds of changes</li></ul>
+    </div>
+    <div class="tier">
+      <span class="n">Pro</span><div class="p">$199</div><div class="t">about 7 days</div>
+      <ul><li>Up to 3 pages</li><li>10 figures, 8 charts</li><li>A panel for typing in new data</li><li>3 rounds of changes</li></ul>
+    </div>
+  </div>
+
+  <div class="cta">
+    <h2>Start with the spreadsheet you dread opening</h2>
+    <p>Message me in the shop with what you have. If a dashboard is the wrong answer for your situation, I will say so.</p>
+    <a class="btn" href="https://afnanstudio95.etsy.com" target="_blank" rel="noopener">Go to the shop</a>
+    <p class="note">Every dashboard is built to order. No template is resold as custom work.</p>
+  </div>
+
+  <footer>
+    <span>AfnanStudio95 — resume and CV templates, planner spreadsheets, custom dashboards</span>
+    <span>Sample figures throughout. No real business data is shown.</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var btn=document.getElementById("themebtn");
+  function prefersDark(){ return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; }
+  function isDark(){ var a=document.documentElement.getAttribute("data-theme"); return a?a==="dark":prefersDark(); }
+  function sync(){ btn.textContent=isDark()?"Light mode":"Dark mode"; }
+  btn.addEventListener("click",function(){ document.documentElement.setAttribute("data-theme",isDark()?"light":"dark"); sync(); });
+  if(window.matchMedia){ try{ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",function(){ if(!document.documentElement.getAttribute("data-theme")) sync(); }); }catch(e){} }
+  sync();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Household Money Dashboard — AfnanStudio95</title>
+<meta name="description" content="Where the money actually went. An interactive sample dashboard by AfnanStudio95.">
+<style>html{-webkit-text-size-adjust:100%}img{max-width:100%}[hidden]{display:none!important}body{margin:0}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one filter row, a KPI band, two charts side by side, a data table underneath. */
+:root{
+  --paper:#fbfcfa; --surface:#ffffff; --surface-2:#f4f6f3;
+  --ink:#10140f; --ink-2:#4b534a; --ink-3:#7c847a;
+  --rule:#e3e8e1; --rule-strong:#c9d1c7;
+  --brand:#1d4a36; --brand-ink:#ffffff;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300;
+  --ok:#17683f; --ok-bg:#e4f3eb; --warn:#8a5600; --warn-bg:#fbefdc; --bad:#a3231c; --bad-bg:#fae9e7;
+  --sans:'IBM Plex Sans',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --paper:#101310; --surface:#191d18; --surface-2:#20251f;
+  --ink:#f3f5f1; --ink-2:#b7bdb3; --ink-3:#868d83;
+  --rule:#2b312a; --rule-strong:#3c443a;
+  --brand:#8ecfae; --brand-ink:#0d1a13;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+  --ok:#73c79b; --ok-bg:#16301f; --warn:#e3ab57; --warn-bg:#322611; --bad:#f08f86; --bad-bg:#361b18;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#101310; --surface:#191d18; --surface-2:#20251f;
+  --ink:#f3f5f1; --ink-2:#b7bdb3; --ink-3:#868d83;
+  --rule:#2b312a; --rule-strong:#3c443a;
+  --brand:#8ecfae; --brand-ink:#0d1a13;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+  --ok:#73c79b; --ok-bg:#16301f; --warn:#e3ab57; --warn-bg:#322611; --bad:#f08f86; --bad-bg:#361b18;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding-block:28px 56px;padding-left:16px;padding-right:16px}
+a{color:inherit}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+h1{font-size:clamp(24px,4vw,32px);line-height:1.15;font-weight:600;letter-spacing:-.02em;margin:6px 0 4px;text-wrap:balance}
+.sub{color:var(--ink-2);margin:0;max-width:62ch}
+.demo{display:inline-flex;align-items:center;gap:8px;margin-bottom:18px;padding:6px 12px 6px 10px;border:1px solid var(--rule-strong);border-radius:999px;font-size:12.5px;color:var(--ink-2);background:var(--surface)}
+.demo b{color:var(--ink);font-weight:600}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--s2);flex:none}
+header.page{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+.themebtn{font:inherit;font-size:13px;padding:8px 14px;border-radius:999px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink-2);cursor:pointer}
+.themebtn:hover{color:var(--ink);border-color:var(--ink-3)}
+.filters{display:flex;flex-wrap:wrap;gap:18px 26px;align-items:flex-end;padding:14px 16px;border:1px solid var(--rule);border-radius:var(--r);background:var(--surface);margin-bottom:18px}
+.fgroup{display:flex;flex-direction:column;gap:7px;min-width:0}
+.flabel{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.seg{display:flex;flex-wrap:wrap;gap:4px}
+.seg button{font:inherit;font-size:13px;padding:7px 13px;border-radius:7px;border:1px solid transparent;background:var(--surface-2);color:var(--ink-2);cursor:pointer;white-space:nowrap}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink);font-weight:500}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:12px}
+.kpi{border:1px solid var(--rule);border-radius:var(--r);background:var(--surface);padding:15px 16px 16px;min-width:0}
+.kpi .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.kpi .v{font-size:27px;font-weight:600;letter-spacing:-.02em;margin-top:7px;line-height:1.1}
+.kpi .d{font-size:12.5px;color:var(--ink-2);margin-top:3px}
+.goal{border:1px solid var(--rule);border-radius:var(--r);background:var(--surface);padding:15px 16px 17px;margin-bottom:22px}
+.goalhead{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:baseline}
+.goalhead .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.goalhead .n{font-size:14px;color:var(--ink-2)}
+.goalhead .n b{color:var(--ink);font-weight:600}
+.track{height:10px;border-radius:999px;background:var(--surface-2);margin-top:11px;overflow:hidden}
+.track span{display:block;height:100%;border-radius:999px;background:var(--s3)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}}
+.card{border:1px solid var(--rule);border-radius:var(--r);background:var(--surface);padding:16px 16px 10px;min-width:0;display:flex;flex-direction:column}
+.cardhead{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:space-between;margin-bottom:2px}
+.cardhead h2{font-size:15.5px;font-weight:600;margin:0;letter-spacing:-.01em}
+.cardhead p{margin:2px 0 0;font-size:12.5px;color:var(--ink-3)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:10px 0 2px}
+.legend span{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-2)}
+.legend i{width:9px;height:9px;border-radius:2px;display:block;flex:none}
+.plot{position:relative;margin-top:8px}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{font-family:var(--mono)}
+svg text.lbl{font-family:var(--sans)}
+.tip{position:absolute;pointer-events:none;z-index:5;background:var(--surface);border:1px solid var(--rule-strong);border-radius:8px;padding:9px 11px;font-size:12.5px;box-shadow:0 6px 20px rgba(16,20,15,.14);min-width:132px}
+.tip .t{font-weight:600;margin-bottom:5px;font-size:12.5px}
+.tip .r{display:flex;justify-content:space-between;gap:14px;color:var(--ink-2)}
+.tip .r b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+.tip i{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:6px}
+.tablewrap{overflow-x:auto;margin-top:20px;border:1px solid var(--rule);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+caption{text-align:left;padding:15px 16px 0;font-size:15.5px;font-weight:600}
+th,td{padding:9px 16px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left;font-variant-numeric:normal}
+thead th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:400;border-bottom:1px solid var(--rule);padding-top:14px}
+tbody tr+tr td{border-top:1px solid var(--rule)}
+tfoot td{border-top:1px solid var(--rule-strong);font-weight:600}
+footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--rule);color:var(--ink-3);font-size:13px;display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between}
+footer b{color:var(--ink-2);font-weight:500}
+:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:500;font-variant-numeric:normal}
+.chip i{width:6px;height:6px;border-radius:50%;display:block;flex:none}
+.chip.ok{color:var(--ok);background:var(--ok-bg)} .chip.ok i{background:var(--ok)}
+.chip.warn{color:var(--warn);background:var(--warn-bg)} .chip.warn i{background:var(--warn)}
+.chip.bad{color:var(--bad);background:var(--bad-bg)} .chip.bad i{background:var(--bad)}
+td.st{text-align:left}
+</style>
+<style>
+.editor{border:1px solid var(--rule);border-radius:var(--r);background:var(--surface);padding:16px;margin-top:20px}
+.editor h2{font-size:15.5px;margin:0 0 2px;font-weight:600}
+.editor p.h{margin:0 0 14px;font-size:12.5px;color:var(--ink-3);max-width:60ch}
+.erow{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:10px;align-items:center;margin-bottom:8px}
+.erow .nm{display:flex;align-items:center;gap:8px;font-size:14px;min-width:0}
+.erow .nm i{width:10px;height:10px;border-radius:3px;flex:none}
+.erow input{font:inherit;font-size:14px;width:100%;padding:8px 10px;border:1px solid var(--rule-strong);border-radius:7px;background:var(--paper);color:var(--ink);font-variant-numeric:tabular-nums}
+.erow input:focus{border-color:var(--s1)}
+.ehead{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:10px;margin-bottom:9px}
+.ehead span{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+.ebar{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px;align-items:center}
+.ebtn{font:inherit;font-size:13px;padding:8px 14px;border-radius:7px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink-2);cursor:pointer}
+.ebtn:hover{color:var(--ink);border-color:var(--ink-3)}
+.ebtn.primary{background:var(--brand);color:var(--brand-ink);border-color:transparent;font-weight:500}
+.note{font-size:12.5px;color:var(--ink-3);margin-left:2px}
+textarea.io{width:100%;min-height:92px;font-family:var(--mono);font-size:12px;padding:10px;border:1px solid var(--rule-strong);border-radius:7px;background:var(--paper);color:var(--ink);margin-top:12px;resize:vertical}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demo"><span class="dot"></span><b>Sample dashboard</b> — starts with example figures, and you can type your own</div>
+
+  <header class="page">
+    <div>
+      <div class="eyebrow">Monthly money · October 2026</div>
+      <h1>Where the money actually went</h1>
+      <p class="sub">Change any number below and every tile, chart and total on this page updates straight away. Your figures stay in this browser — nobody else sees them.</p>
+    </div>
+    <button class="themebtn" id="themebtn" type="button">Dark mode</button>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="goal">
+    <div class="goalhead">
+      <span class="k">Spent against the month's budget</span>
+      <span class="n"><b id="goalnow">—</b> of <span id="goalall">—</span> · <span id="goalpct">—</span></span>
+    </div>
+    <div class="track"><span id="goalbar" style="width:0%"></span></div>
+  </div>
+
+  <div class="grid2">
+    <section class="card">
+      <div class="cardhead"><div><h2>Share of spending</h2><p>Every category as part of the month</p></div></div>
+      <div class="legend" id="legend"></div>
+      <div class="plot" id="plot1"><svg id="svg1" viewBox="0 0 300 300" role="img" aria-label="Share of spending by category"></svg></div>
+    </section>
+
+    <section class="card">
+      <div class="cardhead"><div><h2>Budget against actual</h2><p>The line on each bar is the budget</p></div></div>
+      <div class="plot" id="plot2"><svg id="svg2" viewBox="0 0 560 300" role="img" aria-label="Budget against actual by category"></svg></div>
+    </section>
+  </div>
+
+  <div class="editor">
+    <h2>Your numbers</h2>
+    <p class="h">Type over the example figures. Nothing is sent anywhere — the page saves them in this browser only, so they are still here next time you open it on this device.</p>
+    <div class="ehead"><span>Category</span><span>Budget</span><span>Spent</span></div>
+    <div id="rows"></div>
+    <div class="erow" style="margin-top:12px">
+      <div class="nm" style="font-weight:600">Monthly income</div>
+      <input id="income" type="number" min="0" step="1" inputmode="decimal" aria-label="Monthly income">
+      <span class="note">Used for the savings rate</span>
+    </div>
+    <div class="ebar">
+      <button class="ebtn primary" id="copy" type="button">Copy my figures</button>
+      <button class="ebtn" id="pastebtn" type="button">Paste figures back in</button>
+      <button class="ebtn" id="reset" type="button">Back to the example</button>
+      <span class="note" id="saved"></span>
+    </div>
+    <textarea class="io" id="io" hidden aria-label="Your figures as text"></textarea>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <caption>Every figure on this page</caption>
+      <thead><tr><th>Category</th><th>Budget</th><th>Spent</th><th>Left</th><th>Share of spending</th></tr></thead>
+      <tbody id="tbody"></tbody>
+      <tfoot id="tfoot"></tfoot>
+    </table>
+  </div>
+
+  <footer>
+    <span>Built by <b>AfnanStudio95</b> · <a href="https://afnanstudio95.etsy.com" target="_blank" rel="noopener">see the shop</a> · <a href="index.html">more samples</a></span>
+    <span>Example figures to start with. Replace them with your own.</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY="afn.money.v1";
+  var SAMPLE={income:4200, cats:[
+    {name:"Housing",  budget:1300, spent:1300, v:"--s1"},
+    {name:"Food",     budget:620,  spent:684,  v:"--s2"},
+    {name:"Transport",budget:310,  spent:268,  v:"--s3"},
+    {name:"Bills",    budget:430,  spent:412,  v:"--s4"},
+    {name:"Fun",      budget:280,  spent:355,  v:"--s5"},
+    {name:"Savings",  budget:600,  spent:600,  v:"--s6"}
+  ]};
+  var model=load();
+
+  function load(){
+    try{
+      var raw=localStorage.getItem(KEY);
+      if(raw){
+        var o=JSON.parse(raw);
+        if(o && o.cats && o.cats.length===SAMPLE.cats.length) return normalise(o);
+      }
+    }catch(e){}
+    return normalise(JSON.parse(JSON.stringify(SAMPLE)));
+  }
+  function normalise(o){
+    o.income=num(o.income);
+    o.cats=o.cats.map(function(c,i){
+      return {name:SAMPLE.cats[i].name, v:SAMPLE.cats[i].v, budget:num(c.budget), spent:num(c.spent)};
+    });
+    return o;
+  }
+  function num(x){ var n=parseFloat(x); return isFinite(n)&&n>=0 ? n : 0; }
+  function save(){
+    try{ localStorage.setItem(KEY, JSON.stringify({income:model.income, cats:model.cats.map(function(c){return {budget:c.budget,spent:c.spent};})}));
+         flash("Saved in this browser"); }
+    catch(e){ flash("This browser is not saving — your figures still work on screen"); }
+  }
+  var flashT;
+  function flash(msg){
+    var el=document.getElementById("saved"); el.textContent=msg;
+    clearTimeout(flashT); flashT=setTimeout(function(){ el.textContent=""; }, 2600);
+  }
+
+  function css(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function money(n){ return "$"+Math.round(n).toLocaleString("en-US"); }
+  function totalSpent(){ return model.cats.reduce(function(s,c){return s+c.spent;},0); }
+  function totalBudget(){ return model.cats.reduce(function(s,c){return s+c.budget;},0); }
+
+  var NS="http://www.w3.org/2000/svg";
+  function mk(t,a){ var e=document.createElementNS(NS,t); for(var k in a) e.setAttribute(k,a[k]); return e; }
+  function tipFor(plot){ var t=plot.querySelector(".tip"); if(!t){t=document.createElement("div");t.className="tip";t.hidden=true;plot.appendChild(t);} return t; }
+  function placeTip(plot,t,cx,cy){
+    var pb=plot.getBoundingClientRect();
+    var x=cx-pb.left+14,y=cy-pb.top-10;
+    if(x+t.offsetWidth>pb.width) x=cx-pb.left-t.offsetWidth-14;
+    if(x<0)x=0; if(y+t.offsetHeight>pb.height) y=pb.height-t.offsetHeight; if(y<0)y=0;
+    t.style.left=x+"px"; t.style.top=y+"px";
+  }
+
+  function renderKpis(){
+    var sp=totalSpent(), bu=totalBudget(), inc=model.income;
+    var left=inc-sp;
+    var savedCat=model.cats[model.cats.length-1].spent;
+    var over=model.cats.filter(function(c){return c.spent>c.budget;});
+    var tiles=[
+      {k:"Income",v:money(inc),d:"What came in this month"},
+      {k:"Spent",v:money(sp),d:bu? (sp>bu? money(sp-bu)+" over budget" : money(bu-sp)+" under budget") : "No budget set"},
+      {k:"Left",v:money(left),d:left>=0? (over.length? over.length+" categor"+(over.length>1?"ies are":"y is")+" over budget":"Every category inside budget") : "You spent more than you earned"},
+      {k:"Put into savings",v:money(savedCat),d:inc? (savedCat/inc*100).toFixed(1)+"% of what came in" : "Enter your income above"}
+    ];
+    document.getElementById("kpis").innerHTML=tiles.map(function(t){
+      return '<div class="kpi"><div class="k">'+t.k+'</div><div class="v">'+t.v+'</div><div class="d">'+t.d+'</div></div>';
+    }).join("");
+    var pct=bu? sp/bu*100 : 0;
+    document.getElementById("goalnow").textContent=money(sp);
+    document.getElementById("goalall").textContent=money(bu);
+    document.getElementById("goalpct").textContent=pct.toFixed(0)+"% of the budget used";
+    var bar=document.getElementById("goalbar");
+    bar.style.width=Math.min(100,pct)+"%";
+    bar.style.background=sp>bu? css("--bad") : css("--s3");
+  }
+
+  function renderDonut(){
+    var svg=document.getElementById("svg1"), plot=document.getElementById("plot1");
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    var cx=150, cy=150, rOut=108, rIn=66;
+    var total=totalSpent();
+    var ink=css("--ink"), ink3=css("--ink-3"), surf=css("--surface");
+    var t=tipFor(plot);
+    if(total<=0){
+      var none=mk("text",{x:cx,y:cy,"text-anchor":"middle",fill:ink3,"font-size":13}); none.setAttribute("class","lbl");
+      none.textContent="No spending entered yet"; svg.appendChild(none);
+      document.getElementById("legend").innerHTML=""; return;
+    }
+    var a0=-Math.PI/2;
+    model.cats.forEach(function(c){
+      if(c.spent<=0) return;
+      var frac=c.spent/total, a1=a0+frac*Math.PI*2;
+      var pad=0.012;
+      var s=a0+pad, e=Math.max(s+0.001,a1-pad);
+      var big=(e-s)>Math.PI?1:0;
+      var p=["M",cx+rOut*Math.cos(s),cy+rOut*Math.sin(s),
+             "A",rOut,rOut,0,big,1,cx+rOut*Math.cos(e),cy+rOut*Math.sin(e),
+             "L",cx+rIn*Math.cos(e),cy+rIn*Math.sin(e),
+             "A",rIn,rIn,0,big,0,cx+rIn*Math.cos(s),cy+rIn*Math.sin(s),"Z"].join(" ");
+      var seg=mk("path",{d:p,fill:css(c.v)});
+      seg.addEventListener("mousemove",function(ev){
+        t.hidden=false;
+        t.innerHTML='<div class="t"><i style="background:'+css(c.v)+'"></i>'+c.name+'</div>'+
+          '<div class="r"><span>Spent</span><b>'+money(c.spent)+'</b></div>'+
+          '<div class="r"><span>Share</span><b>'+(frac*100).toFixed(0)+'%</b></div>';
+        placeTip(plot,t,ev.clientX,ev.clientY);
+      });
+      seg.addEventListener("mouseleave",function(){t.hidden=true;});
+      svg.appendChild(seg);
+      a0=a1;
+    });
+    var big=mk("text",{x:cx,y:cy-2,"text-anchor":"middle",fill:ink,"font-size":26,"font-weight":"600"});
+    big.setAttribute("class","lbl"); big.textContent=money(total); svg.appendChild(big);
+    var cap=mk("text",{x:cx,y:cy+20,"text-anchor":"middle",fill:ink3,"font-size":11.5});
+    cap.textContent="SPENT THIS MONTH"; svg.appendChild(cap);
+    document.getElementById("legend").innerHTML=model.cats.map(function(c){
+      return '<span><i style="background:'+css(c.v)+'"></i>'+c.name+' '+(total?Math.round(c.spent/total*100):0)+'%</span>';
+    }).join("");
+  }
+
+  function renderBars(){
+    var svg=document.getElementById("svg2"), plot=document.getElementById("plot2");
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    var W=560, rowH=56, T=16, B=16, L=116, R=92;
+    var H=T+B+rowH*model.cats.length;
+    svg.setAttribute("viewBox","0 0 "+W+" "+H);
+    var iw=W-L-R;
+    var max=Math.max.apply(null, model.cats.map(function(c){ return Math.max(c.spent,c.budget); }).concat([1]));
+    var ink=css("--ink"), ink2=css("--ink-2"), ink3=css("--ink-3"), bad=css("--bad"), s1=css("--s1");
+    var t=tipFor(plot);
+    model.cats.forEach(function(c,i){
+      var cy=T+rowH*i+rowH/2;
+      var nm=mk("text",{x:L-14,y:cy+5,"text-anchor":"end",fill:ink2,"font-size":14});
+      nm.setAttribute("class","lbl"); nm.textContent=c.name; svg.appendChild(nm);
+      var over=c.spent>c.budget;
+      var w=Math.max(0,(c.spent/max)*iw);
+      var rect=mk("rect",{x:L,y:cy-11,width:Math.max(w,c.spent>0?2:0),height:22,fill:over?bad:s1,rx:3});
+      rect.addEventListener("mousemove",function(ev){
+        t.hidden=false;
+        t.innerHTML='<div class="t">'+c.name+'</div>'+
+          '<div class="r"><span>Spent</span><b>'+money(c.spent)+'</b></div>'+
+          '<div class="r"><span>Budget</span><b>'+money(c.budget)+'</b></div>'+
+          '<div class="r"><span>'+(over?'Over by':'Left')+'</span><b>'+money(Math.abs(c.budget-c.spent))+'</b></div>';
+        placeTip(plot,t,ev.clientX,ev.clientY);
+      });
+      rect.addEventListener("mouseleave",function(){t.hidden=true;});
+      svg.appendChild(rect);
+      var bx=L+(c.budget/max)*iw;
+      svg.appendChild(mk("line",{x1:bx,y1:cy-17,x2:bx,y2:cy+17,stroke:ink3,"stroke-width":2,"stroke-linecap":"round"}));
+      var val=mk("text",{x:L+Math.max(w,2)+11,y:cy+5,fill:over?bad:ink,"font-size":14,"font-weight":"500"});
+      val.setAttribute("class","lbl"); val.textContent=money(c.spent)+(over?" over":""); svg.appendChild(val);
+    });
+  }
+
+  function renderTable(){
+    var total=totalSpent();
+    document.getElementById("tbody").innerHTML=model.cats.map(function(c){
+      var over=c.spent>c.budget;
+      return "<tr><td>"+c.name+"</td><td>"+money(c.budget)+"</td><td>"+money(c.spent)+"</td><td>"+
+        (over? '<span class="chip bad"><i></i>'+money(c.spent-c.budget)+" over</span>" : money(c.budget-c.spent))+
+        "</td><td>"+(total?Math.round(c.spent/total*100):0)+"%</td></tr>";
+    }).join("");
+    var diff=totalBudget()-total;
+    document.getElementById("tfoot").innerHTML="<tr><td>Total</td><td>"+money(totalBudget())+"</td><td>"+money(total)+
+      "</td><td>"+(diff<0? '<span class="chip bad"><i></i>'+money(-diff)+" over</span>" : money(diff))+"</td><td>100%</td></tr>";
+  }
+
+  function buildEditor(){
+    var wrap=document.getElementById("rows");
+    wrap.innerHTML="";
+    model.cats.forEach(function(c,i){
+      var row=document.createElement("div"); row.className="erow";
+      row.innerHTML='<div class="nm"><i style="background:'+css(c.v)+'"></i>'+c.name+'</div>'+
+        '<input id="b'+i+'" type="number" min="0" step="1" inputmode="decimal" aria-label="'+c.name+' budget">'+
+        '<input id="s'+i+'" type="number" min="0" step="1" inputmode="decimal" aria-label="'+c.name+' spent">';
+      wrap.appendChild(row);
+      var b=row.querySelector("#b"+i), s=row.querySelector("#s"+i);
+      b.value=c.budget; s.value=c.spent;
+      b.addEventListener("input",function(){ model.cats[i].budget=num(b.value); paint(); save(); });
+      s.addEventListener("input",function(){ model.cats[i].spent=num(s.value); paint(); save(); });
+    });
+    var inc=document.getElementById("income");
+    inc.value=model.income;
+    inc.addEventListener("input",function(){ model.income=num(inc.value); paint(); save(); });
+  }
+  function syncEditor(){
+    model.cats.forEach(function(c,i){
+      var b=document.getElementById("b"+i), s=document.getElementById("s"+i);
+      if(b) b.value=c.budget; if(s) s.value=c.spent;
+    });
+    var inc=document.getElementById("income"); if(inc) inc.value=model.income;
+  }
+
+  function paint(){ renderKpis(); renderDonut(); renderBars(); renderTable(); }
+
+  document.getElementById("reset").addEventListener("click",function(){
+    model=normalise(JSON.parse(JSON.stringify(SAMPLE)));
+    syncEditor(); paint(); save(); flash("Back to the example figures");
+  });
+
+  var io=document.getElementById("io");
+  document.getElementById("copy").addEventListener("click",function(){
+    var text=JSON.stringify({income:model.income,cats:model.cats.map(function(c){return {name:c.name,budget:c.budget,spent:c.spent};})});
+    io.hidden=false; io.value=text;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ flash("Copied — paste it somewhere safe"); })
+        .catch(function(){ io.focus(); io.select(); flash("Select the text below and copy it"); });
+    } else { io.focus(); io.select(); flash("Select the text below and copy it"); }
+  });
+  document.getElementById("pastebtn").addEventListener("click",function(){
+    if(io.hidden){ io.hidden=false; io.value=""; io.focus(); flash("Paste your saved text here, then press this again"); return; }
+    try{
+      var o=JSON.parse(io.value);
+      if(!o || !o.cats || o.cats.length!==SAMPLE.cats.length) throw new Error("shape");
+      model=normalise(o); syncEditor(); paint(); save(); io.hidden=true; flash("Figures loaded");
+    }catch(e){ flash("That text is not a set of figures from this page"); }
+  });
+
+  var btn=document.getElementById("themebtn");
+  function prefersDark(){ return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; }
+  function isDark(){ var a=document.documentElement.getAttribute("data-theme"); return a?a==="dark":prefersDark(); }
+  function syncBtn(){ btn.textContent=isDark()?"Light mode":"Dark mode"; }
+  btn.addEventListener("click",function(){ document.documentElement.setAttribute("data-theme",isDark()?"light":"dark"); syncBtn(); buildEditor(); paint(); });
+  if(window.matchMedia){ try{ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",function(){ if(!document.documentElement.getAttribute("data-theme")){ syncBtn(); buildEditor(); paint(); } }); }catch(e){} }
+
+  syncBtn(); buildEditor(); paint();
+})();
+</script>
+</body>
+</html>
